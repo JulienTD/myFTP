@@ -51,7 +51,7 @@ all: $(NAME)
 
 $(NAME):	$(OBJ) $(OBJ_MAIN)
 			make -C ./lib/ re
-			$(CC) $(CFLAGS) $(OBJ) -L./lib/ -lmy -o $(NAME)
+			$(CC) $(CFLAGS) $(OBJ) $(OBJ_MAIN) -L./lib/ -lmy -o $(NAME)
 
 %.o:		%.c
 			$(CC) $(CFLAGS) -c $< -o $@
