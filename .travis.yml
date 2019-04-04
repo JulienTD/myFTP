@@ -1,0 +1,14 @@
+language: c
+sudo: false # only for faster builds
+install: make get-deps
+script:
+  - echo "Building project ..."
+  - make re
+  - echo "The build has been done"
+
+env:
+  global:
+    - CODECOV_TOKEN=:0caea449-ef00-44df-89a4-87bd613f3bc7
+
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
