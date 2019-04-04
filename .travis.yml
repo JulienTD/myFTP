@@ -1,9 +1,33 @@
 language: c
-sudo: false # only for faster builds
-script:
-  - echo "Building project ..."
-  - make re
-  - echo "The build has been done"
+
+compiler: gcc
+
+sudo: require
+
+service:
+  - docker
+
+git:
+  depth: false
+
+## NOTIFICATIONS
+notifications:
+  email:
+    recipients:
+    - julien.tauran@epitech.eu
+    on_success: always
+    on_failure: always
+
+jobs:
+    include :
+        - stage: build
+          name: "Build"
+          install:
+            - docker pull epitechcontent/epitest-docker
+          script:
+            - docker run -v $PWD:/app epitechcontent/epitest-docker bash -c "cd app && make fclean && make"
+
+////////////////////////////////////////////
 
 env:
   global:
