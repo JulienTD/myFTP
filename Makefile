@@ -28,13 +28,18 @@ SRC_QUEUE			=	queue/queue_add_command.c \
 						queue/queue_add_existing_queue.c \
 						queue/queue_retrieve_command.c
 
+SRCS_CRITERION		=	./tests/test.c
+
 DIR				=	./src/
 
-SRCS			=	$(addprefix $(DIR), $(SRC))				\
-					$(addprefix $(DIR), $(SRC_FTP_SERVER))	\
+SRCS			=	$(addprefix $(DIR), $(SRC_FTP_SERVER))	\
 					$(addprefix $(DIR), $(SRC_FTP_CLIENT))	\
 					$(addprefix $(DIR), $(SRC_QUEUE))		\
 					$(addprefix $(DIR), $(SRC_COMMAND))
+
+SRC_MAIN		=	$(addprefix $(DIR), $(SRC))
+
+OBJ_MAIN		=	$(SRC_MAIN:.c=.o)
 
 OBJ				=	$(SRCS:.c=.o)
 
@@ -44,7 +49,7 @@ CC				=	gcc
 
 all: $(NAME)
 
-$(NAME):	$(OBJ)
+$(NAME):	$(OBJ) $(OBJ_MAIN)
 			make -C ./lib/ re
 			$(CC) $(CFLAGS) $(OBJ) -L./lib/ -lmy -o $(NAME)
 
@@ -53,12 +58,13 @@ $(NAME):	$(OBJ)
 
 re:			fclean all
 
-tests_run:	$(OBJ)
-			$(CC) $(CFLAGS) $(OBJ) -lcriterion --coverage -o test
+tests_run:	$(SRC_MAIN) $(SRCS)
+			make -C ./lib/ re
+			$(CC) $(CFLAGS) $(SRCS) $(SRCS_CRITERION) -lcriterion -L./lib/ -lmy --coverage -o test
 			./test
 
 clean:
-			rm -f $(OBJ) *~ \#*\# \
+			rm -f $(OBJ) *~ \#*\# *.gcno *.gcda
 
 fclean:		clean
 			rm -f $(NAME)

@@ -27,6 +27,14 @@ jobs:
           script:
             - docker run -v $PWD:/app epitechcontent/epitest-docker bash -c "cd app && make fclean && make"
 
+        - stage: tests
+          name: "Unit Tests"
+          install:
+            - docker pull epitechcontent/epitest-docker
+          script:
+            - docker run -v $PWD:/app epitechcontent/epitest-docker bash -c "cd app && make tests_run"
+          after_script:
+            - bash <(curl -s https://codecov.io/bash) || echo "Codecov - Coverage error."
 env:
   global:
     - CODECOV_TOKEN=:0caea449-ef00-44df-89a4-87bd613f3bc7
