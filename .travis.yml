@@ -1,6 +1,5 @@
 language: c
 sudo: false # only for faster builds
-install: make get-deps
 script:
   - echo "Building project ..."
   - make re
