@@ -27,8 +27,6 @@ jobs:
           script:
             - docker run -v $PWD:/app epitechcontent/epitest-docker bash -c "cd app && make fclean && make"
 
-////////////////////////////////////////////
-
 env:
   global:
     - CODECOV_TOKEN=:0caea449-ef00-44df-89a4-87bd613f3bc7
