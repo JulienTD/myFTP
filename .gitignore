@@ -1,0 +1,7 @@
+*.o
+a.out
+.vscode
+test.c
+myftp
+lib/libmy.a
+test_ftp.sh
