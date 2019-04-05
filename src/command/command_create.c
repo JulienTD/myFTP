@@ -20,9 +20,8 @@ command_t *command_create(server_t *server, client_t *client, char *raw_cmd)
     command->client = client;
     command->args = NULL;
     command->args_length = 0;
+    // TODO: remove \r\n and if there is char after it, we must keep it to reinject it to the system
     printf("Command: |%s|\n", raw_cmd);
-    // for (size_t i = 0; i < strlen(client->curr_command); i++)
-    //     printf("Char: %c\n", client->curr_command[i]);
     if (client->curr_command) {
         free(client->curr_command);
         client->curr_command = NULL;

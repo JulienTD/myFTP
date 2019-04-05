@@ -6,3 +6,5 @@ myftp
 lib/libmy.a
 test_ftp.sh
 test
+*.gcno
+*.gcda
