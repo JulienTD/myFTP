@@ -5,6 +5,7 @@
 ** ftpserver_listen
 */
 
+#include <time.h>
 #include "ftp/server.h"
 #include "ftp/client.h"
 
@@ -12,6 +13,7 @@ static bool handler_client(bs_list_t *element, va_list *args)
 {
     server_t *server = (server_t *)va_arg(*args, void *);
     client_t *client = (client_t *)element->data;
+    command_t *command = NULL;
 
     if (!FD_ISSET(client->fd, &server->read_fds))
         return (true);
@@ -23,7 +25,9 @@ static bool handler_client(bs_list_t *element, va_list *args)
     //     printf("[Server] Closing the socket %d\n", client->fd);
     //     return (true);
     // }
-    server_receive(server, client);
+    command = server_receive(server, client);
+    if (command != NULL)
+        queue_add_command(server, command);
     // analyse commands
     return (true);
 }
@@ -57,6 +61,8 @@ bool server_listen(server_t *server)
     int select_status = 0;
 
     while(is_listening){
+        // nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
+        server_execute_queue(server);
         server->read_fds = server->master_fds;
         server->write_fds = server->master_fds;
         select_status = select(server->fd_max + 1, \

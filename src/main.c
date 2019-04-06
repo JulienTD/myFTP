@@ -36,6 +36,7 @@ int main(int ac, char **av)
 
     if (server == NULL)
         return (84);
+    server_configure(server);
     server_start(server);
     server_listen(server);
     return (0);

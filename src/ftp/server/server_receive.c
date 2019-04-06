@@ -8,28 +8,15 @@
 #include <errno.h>
 #include "ftp/server.h"
 
-char *my_strcpy(char *dest, char *src, size_t dest_len) // TODO: move the function to the lib
+static command_t *check_command_end(server_t *server, client_t *client)
 {
-    size_t src_len = 0;
-    size_t index_src = 0;
-
-    for (size_t i = 0; i < strlen(src); i++) {
-        dest[dest_len + i] = src[i];
+    if (client->curr_command && strlen(client->curr_command) == 2 \
+    && client->curr_command[0] == '\r' && client->curr_command[1] == '\n') {
+        free(client->curr_command);
+        client->command_length = 0;
+        client->curr_command = NULL;
+        return (NULL);
     }
-    return (dest);
-}
-
-static command_t *concat_command(server_t *server, client_t *client, \
-                                char *buf, ssize_t bytes_read)
-{
-    client->curr_command = realloc(client->curr_command, \
-                (client->command_length + bytes_read + 1) * sizeof(char));
-    client->curr_command = my_strcpy(client->curr_command, buf, \
-                client->command_length);
-    client->command_length += bytes_read;
-    client->curr_command[client->command_length] = '\0';
-    printf("Adding: %s\nSize: %ld\n", buf, client->command_length);
-    free(buf);
     for (size_t i = 0; i < client->command_length - 1; i++) {
         if (client->curr_command[i] == '\r' && \
                                     client->curr_command[i + 1] == '\n') {
@@ -39,6 +26,22 @@ static command_t *concat_command(server_t *server, client_t *client, \
     return (NULL);
 }
 
+static command_t *concat_command(server_t *server, client_t *client, \
+                                char *buf, ssize_t bytes_read)
+{
+    client->curr_command = realloc(client->curr_command, \
+                (client->command_length + bytes_read + 1) * sizeof(char));
+    if (client->curr_command == NULL)
+        return (NULL);
+    client->curr_command = my_strcpy(client->curr_command, buf, \
+                client->command_length);
+    client->command_length += bytes_read;
+    client->curr_command[client->command_length] = '\0';
+    free(buf);
+    return (check_command_end(server, client));
+}
+
+// TODO: Receive command, parse it, then return a list of commands
 command_t *server_receive(server_t *server, client_t *client)
 {
     char *buf = calloc(CMD_BUFFER_LENGTH, sizeof(char));

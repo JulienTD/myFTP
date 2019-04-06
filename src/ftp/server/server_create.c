@@ -27,6 +27,7 @@ server_t *server_create(char *ip_address, size_t port, size_t max_connections)
     server->fd_max = -1;
     server->clients = NULL;
     server->commands = NULL;
+    server->commands_conf = NULL;
     FD_ZERO(&server->master_fds);
     FD_ZERO(&server->read_fds);
     FD_ZERO(&server->write_fds);
