@@ -7,16 +7,16 @@
 
 #include "ftp/server.h"
 
-bool server_execute_queue(server_t *server)
+bool server_execute_queue_cmd(server_t *server)
 {
     queue_t *queue = NULL;
 
     if (server == NULL)
         return (false);
-    queue = queue_retrieve_command(server);
+    queue = queue_pop(&server->commands);
     while (queue) {
         command_dispatch(queue);
-        queue = queue_retrieve_command(server);
+        queue = queue_pop(&server->commands);
     }
     return (true);
 }

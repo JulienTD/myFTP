@@ -16,7 +16,7 @@ bool command_dispatch(queue_t *queue)
 
     if (queue == NULL)
         return (false);
-    command = (command_t *)queue->element->data;
+    command = (command_t *)queue->data;
     raw_data = hashmap_get_value(&command->server->commands_conf, \
                                 command->args[0]);
     if (raw_data == NULL) {

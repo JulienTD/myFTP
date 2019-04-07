@@ -24,26 +24,30 @@ SRC_FTP_SERVER		=	ftp/server/server_create.c \
 						ftp/server/server_broadcast.c \
 						ftp/server/server_send.c \
 						ftp/server/server_receive.c \
-						ftp/server/server_execute_queue.c \
+						ftp/server/server_execute_queue_cmd.c \
+						ftp/server/server_execute_queue_msg.c \
 						ftp/server/server_configure.c
 
 SRC_FTP_CLIENT		=	ftp/client/client_create.c 	\
 						ftp/client/client_destroy.c \
 						ftp/client/client_disconnect.c
 
-SRC_QUEUE			=	queue/queue_add_command.c \
-						queue/queue_add_existing_queue.c \
-						queue/queue_retrieve_command.c
+SRC_QUEUE			=	queue/queue_push.c \
+						queue/queue_pop.c
+
+SRC_MESSAGE			=	message/message_create.c \
+						message/message_destroy.c
 
 SRCS_CRITERION		=	./tests/test.c
 
 DIR				=	./src/
 
-SRCS			=	$(addprefix $(DIR), $(SRC_FTP_SERVER))	\
-					$(addprefix $(DIR), $(SRC_FTP_CLIENT))	\
-					$(addprefix $(DIR), $(SRC_QUEUE))		\
-					$(addprefix $(DIR), $(SRC_COMMAND))		\
-					$(addprefix $(DIR), $(SRC_COMMAND_EXECUTOR))
+SRCS			=	$(addprefix $(DIR), $(SRC_FTP_SERVER))			\
+					$(addprefix $(DIR), $(SRC_FTP_CLIENT))			\
+					$(addprefix $(DIR), $(SRC_QUEUE))				\
+					$(addprefix $(DIR), $(SRC_COMMAND))				\
+					$(addprefix $(DIR), $(SRC_COMMAND_EXECUTOR))	\
+					$(addprefix $(DIR), $(SRC_MESSAGE))
 
 SRC_MAIN		=	$(addprefix $(DIR), $(SRC))
 

@@ -37,6 +37,7 @@ typedef struct server_s {
     int fd_max;
     bs_list_t *clients;
     queue_t *commands;
+    queue_t *msg_queue;
     hashmap_t *commands_conf;
 } server_t;
 
@@ -46,7 +47,8 @@ bool server_listen(server_t *server);
 bool server_broadcast(server_t *server, client_t *client, char *msg);
 bool server_send(server_t *server, client_t *client, char *msg);
 command_t *server_receive(server_t *server, client_t *client);
-bool server_execute_queue(server_t *server);
+bool server_execute_queue_cmd(server_t *server);
+bool server_execute_queue_msg(server_t *server);
 bool server_configure(server_t *server);
 
 #endif /* !SERVER_H_ */

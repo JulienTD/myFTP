@@ -7,13 +7,18 @@
 
 #include "ftp/client.h"
 #include "ftp/server.h"
+#include "queue/queue.h"
+#include "message/message.h"
 
 bool server_send(server_t *server, client_t *client, char *msg)
 {
+    message_t *message = NULL;
+
     if (server == NULL || client == NULL || msg == NULL)
         return (false);
-    if (!FD_ISSET(client->fd, &server->write_fds))
+    message = message_create(server, client, msg);
+    if (message == NULL)
         return (false);
-    write(client->fd, msg, strlen(msg));
+    queue_push(&server->msg_queue, message);
     return (true);
 }

@@ -8,21 +8,15 @@
 #ifndef QUEUE_H_
     #define QUEUE_H_
 
-#include "ftp/server.h"
 #include "command/command.h"
-
-typedef struct command_s command_t;
-typedef struct server_s server_t;
 
 typedef struct queue_s
 {
-    bs_list_t *element;
-    int attempts;
+    void *data;
     struct queue_s *next;
 } queue_t;
 
-bool queue_add_command(server_t *server, command_t *command);
-bool queue_add_existing_queue(server_t *server, queue_t *queue);
-queue_t *queue_retrieve_command(server_t *server);
+bool queue_push(queue_t **head, void *data);
+queue_t *queue_pop(queue_t **head);
 
 #endif /* !QUEUE_H_ */
