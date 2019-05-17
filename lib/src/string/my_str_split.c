@@ -100,14 +100,3 @@ char **my_str_split(char *str, char *delim)
     tokens[curr_word] = NULL;
     return (tokens);
 }
-
-// int main(void)
-// {
-//     char *str = "USER Mr_Lumiere\r\n";
-//     char *delimiter = "\r\n";
-//     char **tokens = my_str_split(str, delimiter);
-
-//     for (int i = 0; tokens[i]; i++)
-//         printf("|%s|\n", tokens[i]);
-//     return (0);
-// }
